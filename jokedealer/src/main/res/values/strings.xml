@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">JokeDealer</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="joke_response">Ah yea... that\'s some good joke.</string>
+</resources>

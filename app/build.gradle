@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.udacity.gradle.builditbigger"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        free {
+            applicationId "com.udacity.gradle.builditbigger.free"
+        }
+        paid {
+            applicationId "com.udacity.gradle.builditbigger.paid"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.google.android.gms:play-services-ads:7.8.0'
+    compile project(":jokecreator")
+    compile project(":jokedealer")
+    compile project(path: ':backend', configuration: 'android-endpoints')
+    testCompile 'junit:junit:4.12'
+}
+
+/**
+ * gceTestStart is a task that starts up a local GCE server, run an Android unit test and shuts
+ * down the server. Important!! Uncomment the debug server code and comment out the live server code
+ * to get this to work in MainActivity.EndpointsAsyncTask class.
+ */
+task gceTestStart {
+    dependsOn = [":backend:appengineRun", "runAndroidTest", "gceTestEnd"]
+
+    evaluationDependsOn ":backend"
+
+    project(":backend"){
+        appengine{
+            daemon true
+        }
+    }
+
+    doLast {
+        println "GceTest is done"
+    }
+}
+
+/**
+ * Android Unit test to run after local dev server has started
+ */
+task runAndroidTest{
+    dependsOn "connectedAndroidTest"
+    mustRunAfter ":backend:appengineRun"
+}
+
+/**
+ * Task that shutdowns local dev server after Android Unit tests have run
+ */
+task gceTestEnd {
+    dependsOn ":backend:appengineStop"
+    mustRunAfter "runAndroidTest"
+}
