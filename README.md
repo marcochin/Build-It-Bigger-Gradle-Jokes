@@ -1,4 +1,4 @@
-# Gradle for Android and Java Final Project
+# Build It Bigger Gradle Jokes
 
 Created an app with multiple flavors that uses
 multiple libraries and Google Could Endpoints. The finished app will consist
